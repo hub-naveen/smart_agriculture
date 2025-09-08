@@ -14,7 +14,8 @@ import {
   TrendingUp,
   Users,
   MessageCircle,
-  Cloud
+  Cloud,
+  Sparkles
 } from "lucide-react";
 
 export function Navigation() {
@@ -28,12 +29,13 @@ export function Navigation() {
     { name: "Home", path: "/", icon: Home },
     { name: "Diagnose", path: "/diagnose", icon: Camera },
     { name: "Marketplace", path: "/buy", icon: ShoppingCart },
-    { name: "Market Analysis", path: "/market-analysis", icon: TrendingUp },
-    { name: "", path: "/weather", icon: Cloud }, 
+    { name: "Recommendations", path: "/recommendations", icon: Sparkles },
+    { name: "Weather", path: "/weather", icon: Cloud }, 
     { name: "", path: "/user-profile", icon: User }, 
   ];
 
   const moreItems = [
+    { name: "Market Analysis", path: "/market-analysis", icon: TrendingUp },
     { name: "Crops & Hybrids", path: "/crops-hybrid", icon: Leaf },
     { name: "Government Schemes", path: "/government-schemes", icon: Users },
     { name: "Weather", path: "/weather", icon: Cloud },
