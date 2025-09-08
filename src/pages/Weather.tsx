@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   Cloud, 
   Sun, 
@@ -21,13 +22,21 @@ import {
   CheckCircle,
   Info,
   Loader2,
-  RefreshCw
+  RefreshCw,
+  Map,
+  Gauge,
+  Zap as Lightning,
+  Waves,
+  TreePine
 } from "lucide-react";
 import { useWeather } from "@/hooks/useWeather";
 import { getWeatherCondition } from "@/services/weatherService";
+import { WeatherMapModal } from "@/components/WeatherMapModal";
 
 export default function Weather() {
   const { weatherData, location, loading, error, refetch } = useWeather();
+  const [selectedLocation, setSelectedLocation] = useState<{lat: number, lng: number, address: string} | null>(null);
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   // Icon mapping for weather conditions
   const getWeatherIcon = (iconName: string) => {
@@ -115,15 +124,33 @@ export default function Weather() {
   const currentCondition = getWeatherCondition(weatherData.current.weather_code);
   const CurrentWeatherIcon = getWeatherIcon(currentCondition.icon);
 
+  // Handle location selection from map
+  const handleLocationSelect = (lat: number, lng: number, address: string) => {
+    setSelectedLocation({ lat, lng, address });
+    refetch(lat, lng);
+    setIsMapOpen(false);
+  };
+
   const currentWeather = {
     temperature: Math.round(weatherData.current.temperature_2m),
     condition: currentCondition.condition,
     humidity: Math.round(weatherData.current.relative_humidity_2m),
     windSpeed: Math.round(weatherData.current.wind_speed_10m),
-    visibility: 10, // Open-Meteo doesn't provide this in basic plan
+    visibility: Math.round(weatherData.hourly.visibility[0] / 1000) || 10, // Convert to km
     uvIndex: Math.round(weatherData.hourly.uv_index[0] || 0),
     icon: CurrentWeatherIcon,
-    location: location?.address || "Agricultural Technology Center, Innovation Hub, Sector 18, New Delhi, India 110001"
+    location: selectedLocation?.address || location?.address || "Agricultural Technology Center, Innovation Hub, Sector 18, New Delhi, India 110001"
+  };
+
+  // Advanced agricultural data
+  const agriculturalData = {
+    soilTemperature: Math.round(weatherData.hourly.soil_temperature_0cm[0] || 0),
+    soilMoisture: Math.round((weatherData.hourly.soil_moisture_0_to_1cm[0] || 0) * 100),
+    evapotranspiration: Math.round((weatherData.hourly.evapotranspiration[0] || 0) * 10) / 10,
+    solarRadiation: Math.round(weatherData.hourly.shortwave_radiation[0] || 0),
+    dewPoint: Math.round(weatherData.hourly.dew_point_2m[0] || 0),
+    cape: Math.round(weatherData.hourly.cape[0] || 0),
+    visibility: Math.round(weatherData.hourly.visibility[0] / 1000) || 10,
   };
 
   const farmingAlerts = [
@@ -184,17 +211,38 @@ export default function Weather() {
     <div className="min-h-screen bg-background pb-20 md:pb-8">
       {/* Header */}
       <div className="bg-gradient-primary text-primary-foreground p-6 md:p-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">Weather & Farming Guide</h1>
-              <p className="text-primary-foreground/90 flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
-                {currentWeather.location}
-              </p>
-            </div>
+      <div className="max-w-6xl mx-auto">
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">Weather & Farming Guide</h1>
+            <p className="text-primary-foreground/90 flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              {currentWeather.location}
+            </p>
           </div>
+          <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                <Map className="h-4 w-4 mr-2" />
+                Change Location
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Select Weather Location</DialogTitle>
+              </DialogHeader>
+              <WeatherMapModal 
+                onLocationSelect={handleLocationSelect}
+                currentLocation={selectedLocation || (location ? {
+                  lat: location.latitude,
+                  lng: location.longitude,
+                  address: location.address
+                } : undefined)}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
+      </div>
       </div>
 
       <div className="max-w-6xl mx-auto p-6 space-y-8">
@@ -381,11 +429,96 @@ export default function Weather() {
           </CardContent>
         </Card>
 
+        {/* Advanced Agricultural Data */}
+        <Card className="shadow-elegant">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TreePine className="h-5 w-5 text-primary" />
+              Advanced Agricultural Data
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="flex items-center gap-2 p-3 bg-accent/50 rounded-lg">
+                <Thermometer className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Soil Temp</p>
+                  <p className="font-semibold">{agriculturalData.soilTemperature}°C</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 p-3 bg-accent/50 rounded-lg">
+                <Droplets className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Soil Moisture</p>
+                  <p className="font-semibold">{agriculturalData.soilMoisture}%</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 p-3 bg-accent/50 rounded-lg">
+                <Waves className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Evapotranspiration</p>
+                  <p className="font-semibold">{agriculturalData.evapotranspiration} mm</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 p-3 bg-accent/50 rounded-lg">
+                <Sun className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Solar Radiation</p>
+                  <p className="font-semibold">{agriculturalData.solarRadiation} W/m²</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 p-3 bg-accent/50 rounded-lg">
+                <Thermometer className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Dew Point</p>
+                  <p className="font-semibold">{agriculturalData.dewPoint}°C</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 p-3 bg-accent/50 rounded-lg">
+                <Lightning className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">CAPE</p>
+                  <p className="font-semibold">{agriculturalData.cape} J/kg</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 p-3 bg-accent/50 rounded-lg">
+                <Eye className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Visibility</p>
+                  <p className="font-semibold">{agriculturalData.visibility} km</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 p-3 bg-accent/50 rounded-lg">
+                <Gauge className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Pressure</p>
+                  <p className="font-semibold">{Math.round(weatherData.current.pressure_msl)} hPa</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Quick Actions */}
         <Card className="bg-gradient-card">
           <CardContent className="p-6">
             <h3 className="font-semibold mb-4">Quick Weather Actions</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="h-auto py-4 flex-col gap-2">
+                    <Map className="h-5 w-5" />
+                    <span className="text-sm">Change Location</span>
+                  </Button>
+                </DialogTrigger>
+              </Dialog>
               <Button variant="outline" className="h-auto py-4 flex-col gap-2">
                 <Bell className="h-5 w-5" />
                 <span className="text-sm">Weather Alerts</span>

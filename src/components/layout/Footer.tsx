@@ -22,7 +22,7 @@ export function Footer() {
   const quickLinks = [
     { name: "Disease Detection", path: "/diagnose" },
     { name: "Marketplace", path: "/buy" },
-    { name: "Market Analysis", path: "/market-analysis" },
+    { name: "Recommendations", path: "/recommendations" },
     { name: "Weather Forecast", path: "/weather" },
     { name: "Government Schemes", path: "/government-schemes" },
     { name: "Blog & News", path: "/blogs" },
@@ -112,8 +112,8 @@ export function Footer() {
           <div className="lg:col-span-1">
             <h3 className="font-semibold text-foreground mb-4">Support</h3>
             <ul className="space-y-3">
-              {supportLinks.map((link) => (
-                <li key={link.path}>
+              {supportLinks.map((link, index) => (
+                <li key={`${link.path}-${index}`}>
                   <Link
                     to={link.path}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"

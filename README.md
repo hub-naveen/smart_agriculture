@@ -1,73 +1,264 @@
-# Welcome to your Lovable project
+# AgriSmart - Smart Agriculture Platform
 
-## Project info
+[![Deploy with Lovable](https://lovable.dev/deploy-badge.svg)](https://lovable.dev/projects/39025cf3-6b8b-4243-bba9-43a604dfea94)
 
-**URL**: https://lovable.dev/projects/39025cf3-6b8b-4243-bba9-43a604dfea94
+A comprehensive digital agriculture platform that empowers farmers with smart tools, real-time weather data, crop disease detection, market analysis, and direct marketplace access. Built with modern web technologies and supporting multilingual capabilities.
 
-## How can I edit this code?
+## 🌟 Features
 
-There are several ways of editing your application.
+### 🌾 Core Agricultural Tools
+- **Crop Disease Detection**: AI-powered image analysis for identifying plant diseases
+- **Weather Monitoring**: Real-time weather data and forecasts for farming decisions
+- **Market Analysis**: Live market prices and trends for agricultural products
+- **Government Schemes**: Access to agricultural subsidies and government programs
 
-**Use Lovable**
+### 🛒 Marketplace
+- **Buy & Sell**: Direct farmer-to-consumer marketplace
+- **Seller Panel**: Comprehensive dashboard for sellers to manage products
+- **Smart Recommendations**: AI-powered product suggestions
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/39025cf3-6b8b-4243-bba9-43a604dfea94) and start prompting.
+### 🤖 Smart Features
+- **AI Chatbot**: Intelligent farming assistant for queries and guidance
+- **Multilingual Support**: Available in English and Tamil (தமிழ்)
+- **Role-Based Access**: Different interfaces for farmers, buyers, and administrators
+- **Mobile Responsive**: Optimized for all devices
 
-Changes made via Lovable will be committed automatically to this repo.
+### 👤 User Management
+- **Secure Authentication**: Powered by Clerk authentication
+- **User Profiles**: Personalized dashboards and settings
+- **Admin Panel**: Administrative tools and analytics
+- **Protected Routes**: Secure access to sensitive features
 
-**Use your preferred IDE**
+## 🚀 Tech Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Authentication**: Clerk
+- **State Management**: React Context API
+- **Routing**: React Router DOM
+- **API Integration**: TanStack Query
+- **Animations**: Framer Motion
+- **Charts**: Recharts
+- **Icons**: Lucide React
+- **Weather API**: OpenMeteo
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 📦 Installation
 
-Follow these steps:
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Local Development
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. **Clone the repository**
+   ```bash
+   git clone <YOUR_GIT_URL>
+   cd agrismart
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+3. **Set up authentication**
+   - Sign up at [Clerk](https://go.clerk.com/lovable)
+   - Create a new application
+   - Copy your `VITE_CLERK_PUBLISHABLE_KEY`
+   - Update `src/main.tsx` with your key (see [CLERK_SETUP.md](./CLERK_SETUP.md))
+
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open in browser**
+   Navigate to `http://localhost:5173`
+
+## 🏗️ Project Structure
+
+```
+src/
+├── components/           # Reusable UI components
+│   ├── ui/              # shadcn/ui components
+│   ├── home/            # Home page sections
+│   ├── layout/          # Layout components
+│   └── ...
+├── contexts/            # React contexts
+│   ├── AuthContext.tsx  # Authentication context
+│   └── LanguageContext.tsx  # Internationalization
+├── hooks/               # Custom React hooks
+├── pages/               # Application pages/routes
+├── services/            # API services
+├── data/                # Static data and translations
+├── assets/              # Images and static assets
+├── lib/                 # Utility libraries
+└── utils/               # Utility functions
 ```
 
-**Edit a file directly in GitHub**
+## 🌍 Internationalization
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The application supports multiple languages:
 
-**Use GitHub Codespaces**
+- **English** (en) - Default
+- **தமிழ் (Tamil)** (ta) - Complete translation
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Adding Translations
+1. Add new keys to `src/data/translations.json`
+2. Use the `useLanguage` hook in components:
+   ```tsx
+   import { useLanguage } from '@/contexts/LanguageContext';
+   
+   function MyComponent() {
+     const { t } = useLanguage();
+     return <h1>{t("section.title")}</h1>;
+   }
+   ```
 
-## What technologies are used for this project?
+See [README_TRANSLATION.md](./README_TRANSLATION.md) for detailed implementation guide.
 
-This project is built with:
+## 🔑 Authentication Setup
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+This project uses Clerk for authentication. Follow these steps:
 
-## How can I deploy this project?
+1. **Get your Clerk keys**
+   - Sign up at [Clerk](https://go.clerk.com/lovable)
+   - Create a new application
+   - Copy your publishable key
 
-Simply open [Lovable](https://lovable.dev/projects/39025cf3-6b8b-4243-bba9-43a604dfea94) and click on Share -> Publish.
+2. **Configure the application**
+   - Update `src/main.tsx` with your Clerk publishable key
+   - The app includes pre-built auth components and protected routes
 
-## Can I connect a custom domain to my Lovable project?
+See [CLERK_SETUP.md](./CLERK_SETUP.md) for detailed setup instructions.
 
-Yes, you can!
+## 🎨 Styling and Theming
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+The project uses a design system approach:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **Tailwind CSS**: Utility-first CSS framework
+- **shadcn/ui**: High-quality, accessible components
+- **CSS Custom Properties**: Semantic color tokens
+- **Dark/Light Mode**: Built-in theme switching
+
+### Design System
+- Colors are defined as HSL values in `src/index.css`
+- Components use semantic tokens from `tailwind.config.ts`
+- Custom variants available for different use cases
+
+## 📱 Key Pages and Features
+
+### 🏠 Home (`/`)
+- Hero section with platform overview
+- Feature highlights and statistics
+- User testimonials and call-to-action
+
+### 🌤️ Weather (`/weather`)
+- Real-time weather data
+- 7-day forecasts
+- Agricultural weather insights
+
+### 🔍 Diagnose (`/diagnose`)
+- Crop disease detection using AI
+- Image upload and analysis
+- Treatment recommendations
+
+### 📊 Market Analysis (`/market-analysis`)
+- Live commodity prices
+- Market trends and analytics
+- Price prediction models
+
+### 🛒 Marketplace (`/buy`)
+- Product catalog with search and filters
+- Direct farmer connections
+- Secure transaction handling
+
+### 👤 User Management
+- `/auth` - Authentication pages
+- `/profile` - User profile management
+- `/admin` - Administrative dashboard
+
+## 🔧 Configuration
+
+### Environment Variables
+The project doesn't use traditional env files. Instead:
+- Clerk publishable key is set directly in `main.tsx`
+- API endpoints are configured in service files
+- Feature flags can be added to context providers
+
+### API Integration
+- Weather data: OpenMeteo API
+- Authentication: Clerk
+- Custom APIs can be added in `src/services/`
+
+## 🚀 Deployment
+
+### Lovable (Recommended)
+1. Open your [Lovable project](https://lovable.dev/projects/39025cf3-6b8b-4243-bba9-43a604dfea94)
+2. Click "Share" → "Publish"
+3. Your app will be live with a Lovable subdomain
+
+### Custom Domain
+1. Navigate to Project → Settings → Domains in Lovable
+2. Connect your custom domain
+3. Follow the DNS configuration instructions
+
+### Other Platforms
+The app can be deployed to any static hosting service:
+- Vercel
+- Netlify
+- GitHub Pages
+- AWS S3 + CloudFront
+
+Build command: `npm run build`
+Output directory: `dist`
+
+## 🧪 Development
+
+### Available Scripts
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+### Code Quality
+- TypeScript for type safety
+- ESLint for code linting
+- Prettier for code formatting (via ESLint config)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Development Guidelines
+- Follow the existing code style and patterns
+- Use TypeScript for all new code
+- Add proper error handling and loading states
+- Test on both mobile and desktop
+- Ensure accessibility standards are met
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- **Documentation**: [Lovable Docs](https://docs.lovable.dev/)
+- **Community**: [Discord](https://discord.com/channels/1119885301872070706/1280461670979993613)
+- **Video Tutorials**: [YouTube Playlist](https://www.youtube.com/watch?v=9KHLTZaJcR8&list=PLbVHz4urQBZkJiAWdG8HWoJTdgEysigIO)
+
+## 🙏 Acknowledgments
+
+- Built with [Lovable](https://lovable.dev) - The AI-powered development platform
+- Icons by [Lucide](https://lucide.dev)
+- UI components by [shadcn/ui](https://ui.shadcn.com)
+- Weather data from [OpenMeteo](https://open-meteo.com)
+- Authentication by [Clerk](https://clerk.com)
+
+---
+
+**Made with ❤️ for farmers and agricultural communities worldwide**

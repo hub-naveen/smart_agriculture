@@ -20,6 +20,8 @@ import Auth from "./pages/Auth";
 import RoleLogin from "./pages/RoleLogin";
 import NotFound from "./pages/NotFound";
 import Chatbot from "./pages/Chatbot";
+import Admin from "./pages/Admin";
+import Recommendations from "./pages/Recommendations";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +52,7 @@ const App = () => (
           } />
           <Route path="/government-schemes" element={<Layout><GovernmentSchemes /></Layout>} />
           <Route path="/weather" element={<Layout><Weather /></Layout>} />
+          <Route path="/recommendations" element={<Layout><Recommendations /></Layout>} />
           <Route path="/blogs" element={<Layout><Blog /></Layout>} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/auth" element={<Auth />} />
@@ -58,7 +61,7 @@ const App = () => (
           {/* Placeholder routes for future pages */}
           <Route path="/admin" element={
             <ProtectedRoute requiredRole="admin">
-              <Layout><div className="p-8 text-center"><h1 className="text-2xl">Admin Dashboard</h1><p className="text-muted-foreground mt-2">Welcome, Administrator!</p></div></Layout>
+              <Admin />
             </ProtectedRoute>
           } />
           <Route path="/crops-hybrid" element={<Layout><div className="p-8 text-center"><h1 className="text-2xl">Crops & Hybrids - Coming Soon</h1></div></Layout>} />
