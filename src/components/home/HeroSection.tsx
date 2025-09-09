@@ -62,15 +62,6 @@ export function HeroSection() {
               Start Disease Detection
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
-            
-            <Button
-              variant="outline"
-              size="xl"
-              className="w-full sm:w-auto group border-white/20 text-white hover:bg-white/10"
-            >
-              <Play className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-              Watch Demo
-            </Button>
           </div>
         </div>
       </div>
